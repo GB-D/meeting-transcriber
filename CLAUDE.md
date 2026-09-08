@@ -61,8 +61,11 @@ Single-source: Audio/Video → 16kHz mono (AVAudioFile → AVAsset → ffmpeg fa
 cd app/MeetingTranscriber && swift test --parallel
 
 # Swift tests under sanitizers (slow — TSan ~7.5 min, ASan ~4.5 min on M-series)
-# CI runs these nightly via cron + on push to main; locally use ad-hoc
-# before pushing concurrency-heavy or C-bridging changes.
+# CI's Quality & Safety workflow runs ASan on every same-repo PR automatically;
+# TSan runs when the PR's diff touches a concurrency primitive or a sanitized
+# package's manifest, or carries the run-quality label (push/schedule/dispatch
+# always run both). Locally, run ad-hoc before pushing concurrency-heavy or
+# C-bridging changes.
 cd app/MeetingTranscriber && swift test --parallel --sanitize=thread --skip MenuBarIconSnapshotTests
 cd app/MeetingTranscriber && swift test --parallel --sanitize=address --skip MenuBarIconSnapshotTests
 
